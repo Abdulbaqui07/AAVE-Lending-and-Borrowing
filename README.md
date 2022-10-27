@@ -17,7 +17,7 @@ For a deep explanation of the Aave Protocol, read the [White Paper](./docs/Aave_
 
 ## Source code
 
-The source code included is the updated version of the protocol, reengineered to it's initial version like (ETHLEND) with only support of lending and borrowing. Eventual changes (smart contracts updates, bug fixes, etc.) will be applied through subsequent merge requests.
+The source code included is the updated version of the protocol, re-engineered back to it's initial version like (ETHLEND) with only support of lending and borrowing. Eventual changes (smart contracts updates, bug fixes, etc.) will be applied through subsequent merge requests.
 
 ## Steps to Implement
 
