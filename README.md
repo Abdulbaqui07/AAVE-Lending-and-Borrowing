@@ -1,6 +1,12 @@
-# [Aave Protocol](https://aave.com/) &middot; [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+# [Aave Protocol](https://aave.com/);
 
 Open source implementation of the Aave Decentralized Lending Pools protocol. Version 1.0
+
+Aave is a decentralised non-custodial liquidity protocol where users can participate as depositors or borrowers. Depositors provide liquidity to the market to earn a passive income, while borrowers are able to borrow in an over-collateralised (perpetually) or under-collateralised (one-block liquidity) fashion.
+
+<center><a href="https://user-images.githubusercontent.com/87430736/198200803-c70fc71d-4c52-4b14-9937-b9b740d009e3.png)"></center>
+ 
+ 
 
 
 ## Documentation
