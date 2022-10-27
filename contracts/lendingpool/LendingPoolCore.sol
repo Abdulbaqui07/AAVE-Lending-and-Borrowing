@@ -6,13 +6,13 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "openzeppelin-solidity/contracts/utils/Address.sol";
 import "../libraries/openzeppelin-upgradeability/VersionedInitializable.sol";
 
-import "../libraries/CoreLibrary.sol";
 import "../configuration/LendingPoolAddressesProvider.sol";
 import "../interfaces/ILendingRateOracle.sol";
 import "../interfaces/IReserveInterestRateStrategy.sol";
 import "../libraries/WadRayMath.sol";
 import "../tokenization/AToken.sol";
 import "../libraries/EthAddressLib.sol";
+import "../libraries/CoreLibrary.sol";
 
 /**
 * @title LendingPoolCore contract
@@ -147,27 +147,27 @@ contract LendingPoolCore is VersionedInitializable {
     * @param _reserve the address of the reserve in which the flashloan is happening
     * @param _income the income of the protocol as a result of the action
     **/
-    function updateStateOnFlashLoan(
-        address _reserve,
-        uint256 _availableLiquidityBefore,
-        uint256 _income,
-        uint256 _protocolFee
-    ) external onlyLendingPool {
-        transferFlashLoanProtocolFeeInternal(_reserve, _protocolFee);
+    // function updateStateOnFlashLoan(
+    //     address _reserve,
+    //     uint256 _availableLiquidityBefore,
+    //     uint256 _income,
+    //     uint256 _protocolFee
+    // ) external onlyLendingPool {
+    //     transferFlashLoanProtocolFeeInternal(_reserve, _protocolFee);
 
-        //compounding the cumulated interest
-        reserves[_reserve].updateCumulativeIndexes();
+    //     //compounding the cumulated interest
+    //     reserves[_reserve].updateCumulativeIndexes();
 
-        uint256 totalLiquidityBefore = _availableLiquidityBefore.add(
-            getReserveTotalBorrows(_reserve)
-        );
+    //     uint256 totalLiquidityBefore = _availableLiquidityBefore.add(
+    //         getReserveTotalBorrows(_reserve)
+    //     );
 
-        //compounding the received fee into the reserve
-        reserves[_reserve].cumulateToLiquidityIndex(totalLiquidityBefore, _income);
+    //     //compounding the received fee into the reserve
+    //     reserves[_reserve].cumulateToLiquidityIndex(totalLiquidityBefore, _income);
 
-        //refresh interest rates
-        updateReserveInterestRatesAndTimestampInternal(_reserve, _income, 0);
-    }
+    //     //refresh interest rates
+    //     updateReserveInterestRatesAndTimestampInternal(_reserve, _income, 0);
+    // }
 
     /**
     * @dev updates the state of the core as a consequence of a borrow action.
@@ -1741,17 +1741,17 @@ contract LendingPoolCore is VersionedInitializable {
     * @param _amount the amount being transferred
     **/
 
-    function transferFlashLoanProtocolFeeInternal(address _token, uint256 _amount) internal {
-        address payable receiver = address(uint160(addressesProvider.getTokenDistributor()));
+    // function transferFlashLoanProtocolFeeInternal(address _token, uint256 _amount) internal {
+    //     address payable receiver = address(uint160(addressesProvider.getTokenDistributor()));
 
-        if (_token != EthAddressLib.ethAddress()) {
-            ERC20(_token).safeTransfer(receiver, _amount);
-        } else {
-            //solium-disable-next-line
-            (bool result, ) = receiver.call.value(_amount)("");
-            require(result, "Transfer to token distributor failed");
-        }
-    }
+    //     if (_token != EthAddressLib.ethAddress()) {
+    //         ERC20(_token).safeTransfer(receiver, _amount);
+    //     } else {
+    //         //solium-disable-next-line
+    //         (bool result, ) = receiver.call.value(_amount)("");
+    //         require(result, "Transfer to token distributor failed");
+    //     }
+    // }
 
     /**
     * @dev updates the internal configuration of the core

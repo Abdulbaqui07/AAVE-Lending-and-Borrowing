@@ -45,7 +45,6 @@ contract LendingPoolAddressesProvider is Ownable, ILendingPoolAddressesProvider,
     bytes32 private constant WALLET_BALANCE_PROVIDER = "WALLET_BALANCE_PROVIDER";
     bytes32 private constant TOKEN_DISTRIBUTOR = "TOKEN_DISTRIBUTOR";
 
-
     /**
     * @dev returns the address of the LendingPool proxy
     * @return the lending pool proxy address
@@ -233,6 +232,5 @@ contract LendingPoolAddressesProvider is Ownable, ILendingPoolAddressesProvider,
         } else {
             proxy.upgradeToAndCall(_newAddress, params);
         }
-
     }
 }

@@ -6,6 +6,7 @@ import "../libraries/openzeppelin-upgradeability/VersionedInitializable.sol";
 import "../configuration/LendingPoolAddressesProvider.sol";
 import "./LendingPoolCore.sol";
 import "../tokenization/AToken.sol";
+import "../libraries/whitelistedToken.sol";
 
 /**
 * @title LendingPoolConfigurator contract
@@ -14,7 +15,7 @@ import "../tokenization/AToken.sol";
 * and set different protocol parameters.
 **/
 
-contract LendingPoolConfigurator is VersionedInitializable {
+contract LendingPoolConfigurator is VersionedInitializable, WhitelistedToken {
     using SafeMath for uint256;
 
     /**
@@ -174,7 +175,7 @@ contract LendingPoolConfigurator is VersionedInitializable {
         address _reserve,
         uint8 _underlyingAssetDecimals,
         address _interestRateStrategyAddress
-    ) external onlyLendingPoolManager {
+    ) external onlyLendingPoolManager isWhitelistedToken(_reserve) {
         ERC20Detailed asset = ERC20Detailed(_reserve);
 
         string memory aTokenName = string(abi.encodePacked("Aave Interest bearing ", asset.name()));

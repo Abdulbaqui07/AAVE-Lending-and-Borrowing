@@ -15,7 +15,7 @@ import "../libraries/WadRayMath.sol";
  * @dev Implementation of the interest bearing token for the DLP protocol.
  * @author Aave
  */
-contract AToken is ERC20, ERC20Detailed {
+contract AToken is ERC20 , ERC20Detailed {  // 
     using WadRayMath for uint256;
 
     uint256 public constant UINT_MAX_VALUE = uint256(-1);
@@ -151,7 +151,7 @@ contract AToken is ERC20, ERC20Detailed {
         uint8 _underlyingAssetDecimals,
         string memory _name,
         string memory _symbol
-    ) public ERC20Detailed(_name, _symbol, _underlyingAssetDecimals) {
+    ) public  ERC20Detailed(_name, _symbol, _underlyingAssetDecimals){ // ERC20Detailed(_name, _symbol, _underlyingAssetDecimals)
 
         addressesProvider = _addressesProvider;
         core = LendingPoolCore(addressesProvider.getLendingPoolCore());

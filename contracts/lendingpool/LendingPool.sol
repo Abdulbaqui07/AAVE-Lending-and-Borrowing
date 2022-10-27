@@ -12,7 +12,7 @@ import "../tokenization/AToken.sol";
 import "../libraries/CoreLibrary.sol";
 import "../libraries/WadRayMath.sol";
 import "../interfaces/IFeeProvider.sol";
-import "../flashloan/interfaces/IFlashLoanReceiver.sol";
+
 import "./LendingPoolCore.sol";
 import "./LendingPoolDataProvider.sol";
 import "./LendingPoolLiquidationManager.sol";
@@ -840,66 +840,66 @@ contract LendingPool is ReentrancyGuard, VersionedInitializable {
     * @param _reserve the address of the principal reserve
     * @param _amount the amount requested for this flashloan
     **/
-    function flashLoan(address _receiver, address _reserve, uint256 _amount, bytes memory _params)
-        public
-        nonReentrant
-        onlyActiveReserve(_reserve)
-        onlyAmountGreaterThanZero(_amount)
-    {
-        //check that the reserve has enough available liquidity
-        //we avoid using the getAvailableLiquidity() function in LendingPoolCore to save gas
-        uint256 availableLiquidityBefore = _reserve == EthAddressLib.ethAddress()
-            ? address(core).balance
-            : IERC20(_reserve).balanceOf(address(core));
+    // function flashLoan(address _receiver, address _reserve, uint256 _amount, bytes memory _params)
+    //     public
+    //     nonReentrant
+    //     onlyActiveReserve(_reserve)
+    //     onlyAmountGreaterThanZero(_amount)
+    // {
+    //     //check that the reserve has enough available liquidity
+    //     //we avoid using the getAvailableLiquidity() function in LendingPoolCore to save gas
+    //     uint256 availableLiquidityBefore = _reserve == EthAddressLib.ethAddress()
+    //         ? address(core).balance
+    //         : IERC20(_reserve).balanceOf(address(core));
 
-        require(
-            availableLiquidityBefore >= _amount,
-            "There is not enough liquidity available to borrow"
-        );
+    //     require(
+    //         availableLiquidityBefore >= _amount,
+    //         "There is not enough liquidity available to borrow"
+    //     );
 
-        (uint256 totalFeeBips, uint256 protocolFeeBips) = parametersProvider
-            .getFlashLoanFeesInBips();
-        //calculate amount fee
-        uint256 amountFee = _amount.mul(totalFeeBips).div(10000);
+    //     (uint256 totalFeeBips, uint256 protocolFeeBips) = parametersProvider
+    //         .getFlashLoanFeesInBips();  // LendingPoolParameterProvider done
+    //     //calculate amount fee
+    //     uint256 amountFee = _amount.mul(totalFeeBips).div(10000);
 
-        //protocol fee is the part of the amountFee reserved for the protocol - the rest goes to depositors
-        uint256 protocolFee = amountFee.mul(protocolFeeBips).div(10000);
-        require(
-            amountFee > 0 && protocolFee > 0,
-            "The requested amount is too small for a flashLoan."
-        );
+    //     //protocol fee is the part of the amountFee reserved for the protocol - the rest goes to depositors
+    //     uint256 protocolFee = amountFee.mul(protocolFeeBips).div(10000);
+    //     require(
+    //         amountFee > 0 && protocolFee > 0,
+    //         "The requested amount is too small for a flashLoan."
+    //     );
 
-        //get the FlashLoanReceiver instance
-        IFlashLoanReceiver receiver = IFlashLoanReceiver(_receiver);
+    //     //get the FlashLoanReceiver instance
+    //     IFlashLoanReceiver receiver = IFlashLoanReceiver(_receiver);
 
-        address payable userPayable = address(uint160(_receiver));
+    //     address payable userPayable = address(uint160(_receiver));
 
-        //transfer funds to the receiver
-        core.transferToUser(_reserve, userPayable, _amount);
+    //     //transfer funds to the receiver
+    //     core.transferToUser(_reserve, userPayable, _amount);
 
-        //execute action of the receiver
-        receiver.executeOperation(_reserve, _amount, amountFee, _params);
+    //     //execute action of the receiver
+    //     receiver.executeOperation(_reserve, _amount, amountFee, _params);
 
-        //check that the actual balance of the core contract includes the returned amount
-        uint256 availableLiquidityAfter = _reserve == EthAddressLib.ethAddress()
-            ? address(core).balance
-            : IERC20(_reserve).balanceOf(address(core));
+    //     //check that the actual balance of the core contract includes the returned amount
+    //     uint256 availableLiquidityAfter = _reserve == EthAddressLib.ethAddress()
+    //         ? address(core).balance
+    //         : IERC20(_reserve).balanceOf(address(core));
 
-        require(
-            availableLiquidityAfter == availableLiquidityBefore.add(amountFee),
-            "The actual balance of the protocol is inconsistent"
-        );
+    //     require(
+    //         availableLiquidityAfter == availableLiquidityBefore.add(amountFee),
+    //         "The actual balance of the protocol is inconsistent"
+    //     );
 
-        core.updateStateOnFlashLoan(
-            _reserve,
-            availableLiquidityBefore,
-            amountFee.sub(protocolFee),
-            protocolFee
-        );
+    //     core.updateStateOnFlashLoan(
+    //         _reserve,
+    //         availableLiquidityBefore,
+    //         amountFee.sub(protocolFee),
+    //         protocolFee
+    //     );
 
-        //solium-disable-next-line
-        emit FlashLoan(_receiver, _reserve, _amount, amountFee, protocolFee, block.timestamp);
-    }
+    //     //solium-disable-next-line
+    //     emit FlashLoan(_receiver, _reserve, _amount, amountFee, protocolFee, block.timestamp);
+    // }
 
     /**
     * @dev accessory functions to fetch data from the core contract
