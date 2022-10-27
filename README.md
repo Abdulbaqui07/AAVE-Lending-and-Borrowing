@@ -4,10 +4,9 @@ Open source implementation of the Aave Decentralized Lending Pools protocol. Ver
 
 Aave is a decentralised non-custodial liquidity protocol where users can participate as depositors or borrowers. Depositors provide liquidity to the market to earn a passive income, while borrowers are able to borrow in an over-collateralised (perpetually) or under-collateralised (one-block liquidity) fashion.
 
-<center><a href="https://user-images.githubusercontent.com/87430736/198200803-c70fc71d-4c52-4b14-9937-b9b740d009e3.png"></center>
- 
- 
-
+<p align="center">
+ <img src="https://user-images.githubusercontent.com/87430736/198200803-c70fc71d-4c52-4b14-9937-b9b740d009e3.png">
+</p>
 
 ## Documentation
 
